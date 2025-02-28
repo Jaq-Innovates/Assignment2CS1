@@ -100,7 +100,7 @@ int main(void){
     }
 
     // 5) Free the linked list and close files
-    freeList(head);
+    freeList(head, output);
     fclose(fp);
     fclose(output);
 
@@ -130,7 +130,6 @@ node_t *borrowBook(node_t *head, char *title, char *lastName, char *firstName, F
     //print data taken
     fprintf(output, "Borrowed \"%s\" by %s %s", newNode->bookTitle,newNode->lastName,newNode->firstName);
 
-    newNode->next = NULL;
 
     //If the list is emty set head as the newNode
     if(head == NULL){
@@ -141,7 +140,7 @@ node_t *borrowBook(node_t *head, char *title, char *lastName, char *firstName, F
         while(value->next != NULL){
            value = value->next;
     }
-    value = next->newNode;
+    value->next = newNode;
  }
     return head;
 }
@@ -187,11 +186,11 @@ void checkBook(node_t *head, char *title, char *lastName, char *firstName, FILE 
     node_t *value = head;
 
     //Search the list
-    while (current != NULL) {
+    while (value != NULL) {
         //Compare all three: bookTitle, lastName, firstName
-        if (strcmp(current->bookTitle, title) == 0 &&
-            strcmp(current->lastName, lastName) == 0 &&
-            strcmp(current->firstName, firstName) == 0) {
+        if (strcmp(value->bookTitle, title) == 0 &&
+            strcmp(value->lastName, lastName) == 0 &&
+            strcmp(value->firstName, firstName) == 0) {
             
             //Print when a match is found
             fprintf(output, "\"%s\" is borrowed by %s, %s\n", value->bookTitle, value->lastName, value->firstName);
@@ -223,3 +222,12 @@ void displayBorrowedBooks(node_t *head, FILE *output){
     }
 }
 
+
+void freeList(node_t *head, FILE *output) {
+    node_t *current = head;
+    while (current != NULL) {
+        node_t *temp = current;
+        current = current->next;
+        free(temp);
+    }
+}
