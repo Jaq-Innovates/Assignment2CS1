@@ -1,10 +1,5 @@
-Borrowed "The Great Gatsby" by Fitzgerald, Scott
-Borrowed "1984" by Orwell, George
-"The Catcher in the Rye" is not currently borrowed by Salinger, Jerome
-Returned "1984" by Orwell, George
+Borrowed "The Great Gatsby" by Fitzgerald ScottBorrowed "1984" by Orwell George"The Catcher in the Rye" is not currently borrowed by Salinger, Jerome
+Returned "1984" by Orwell George
 "1984" is not currently borrowed by Orwell, George
-Borrowed "To Kill a Mockingbird" by Lee, Harper
-Borrowed Books List:
-1. "The Great Gatsby" - Fitzgerald, Scott
-2. "To Kill a Mockingbird" - Lee, Harper
-Thank you for using the Library System!
+Borrowed "To Kill a Mockingbird" by Lee HarperBorrowed Books List: 
+2. "The Great Gatsby - Fitzgerald, Scott3. "To Kill a Mockingbird - Lee, HarperThank you for using the Library System!
