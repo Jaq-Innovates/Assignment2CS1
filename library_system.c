@@ -3,13 +3,14 @@
 //Author: Andres Martinez
 //Date: 2/18/2025
 //Class: COP3502, Dr. Ali 
-//Purpose: The purpose of this program is to work with linked lists
-//**********************************
+//Purpose:The purpose of this program is to work with linked lists
+//***********************************
 
 // Hint: To read the book title, author's first name, and author's last name,  
 // you can use:  
 // fscanf(file, " \"%[^\"]\" %s %s", bookTitle, lastName, firstName);  
 
+//libraries
 #include <stdio.h>
 #include <stdlib.h>
 #include <string.h>
@@ -17,12 +18,14 @@
 #define MAX_TITLE 100
 #define MAX_NAME 50
 
-// Define the linked list node
+//building struct for linked list
 typedef struct node_s {
+    //need to store data for bookTitle, borrowerFirstN, borrowerLastN
     char bookTitle[MAX_TITLE];
     char firstName[MAX_NAME];
     char lastName[MAX_NAME];
-    struct node_s *next;
+    //pointer to next nodes
+    struct node_s* next;
 } node_t;
 
 // Function prototypes
@@ -30,19 +33,20 @@ node_t *borrowBook(node_t *head, char *title, char *lastName, char *firstName, F
 node_t *returnBook(node_t *head, char *title, char *lastName, char *firstName, FILE *output);
 void checkBook(node_t *head, char *title, char *lastName, char *firstName, FILE *output);
 void displayBorrowedBooks(node_t *head, FILE *output);
-void freeList(node_t *head);
+void freeList(node_t *head, FILE *output);
 
 
-
-int main(void) {
+int main(void){
+    // 1) Create a pointer to your linked list
     node_t *head = NULL;
 
-    // Open the input file for reading and output file for writing.
+    // 2) Open the input and output files
     FILE *fp = fopen("library_records.txt", "r");
     if (!fp) {
         printf("Error: Could not open input file.\n");
         return 1;
     }
+
     FILE *output = fopen("output.txt", "w");
     if (!output) {
         printf("Error: Could not open output file.\n");
@@ -51,139 +55,171 @@ int main(void) {
     }
 
     int operationCode;
-    // Read each operation code from the file.
+    // 3) Read each operation code from the file
     while (fscanf(fp, "%d", &operationCode) == 1) {
-        // If operationCode == 5, quit.
+        // If operationCode == 5, exit the program
         if (operationCode == 5) {
             fprintf(output, "Thank you for using the Library System!\n");
             break;
         }
 
-        // For operations 1, 2, and 3 we need to read book info.
+        // For operations that need book info (1, 2, 3),
+        // prepare local arrays to store the strings
         char title[MAX_TITLE];
         char lastName[MAX_NAME];
         char firstName[MAX_NAME];
 
+        // 4) Use a switch to call the correct function
         switch (operationCode) {
             case 1: // Borrow a Book
+                // Read: "Book Title" LastName FirstName
                 fscanf(fp, " \"%[^\"]\" %s %s", title, lastName, firstName);
                 head = borrowBook(head, title, lastName, firstName, output);
                 break;
+
             case 2: // Return a Book
                 fscanf(fp, " \"%[^\"]\" %s %s", title, lastName, firstName);
                 head = returnBook(head, title, lastName, firstName, output);
                 break;
+
             case 3: // Check if a Book is Borrowed
                 fscanf(fp, " \"%[^\"]\" %s %s", title, lastName, firstName);
                 checkBook(head, title, lastName, firstName, output);
                 break;
+
             case 4: // Display All Borrowed Books
+                // No extra data to read for operation 4
                 displayBorrowedBooks(head, output);
                 break;
+
             default:
-                // Unknown operation; you can skip or handle as needed.
+                // If it's an unknown code (not 1–5), decide how to handle it
+                // For now, do nothing or skip the line
                 break;
         }
     }
 
-    // Clean up: free the linked list and close files.
+    // 5) Free the linked list and close files
     freeList(head);
     fclose(fp);
     fclose(output);
+
     return 0;
 }
 
-//------------------------
-// Function Definitions
-//------------------------
+//borrow book function 
+node_t *borrowBook(node_t *head, char *title, char *lastName, char *firstName, FILE *output){
+    //Whole purpose of this is to add to end of a linked list
 
-// Adds a new node to the end of the list (Borrow a Book)
-node_t *borrowBook(node_t *head, char *title, char *lastName, char *firstName, FILE *output) {
-    node_t *newNode = malloc(sizeof(node_t));
-    if (!newNode) {
-        printf("Memory allocation failed.\n");
-        return head;
+    //allocate memory for node in the linked list
+    node_t*  newNode = malloc(sizeof(node_t));
+
+    //error handle for DMA
+    if(!newNode){
+        printf("Memory allocation failed. \n");
+        return NULL;
     }
-    // Copy the book info into the new node.
-    strcpy(newNode->bookTitle, title);
-    strcpy(newNode->lastName, lastName);
+
+    //Place data into new node
+    strcpy(newNode->bookTitle, title);//Im going to use fscanf in my main to read each line
+    strcpy(newNode->lastName,  lastName);
     strcpy(newNode->firstName, firstName);
+
+    newNode->next = NULL; 
+
+    //print data taken
+    fprintf(output, "Borrowed \"%s\" by %s %s", newNode->bookTitle,newNode->lastName,newNode->firstName);
+
     newNode->next = NULL;
 
-    // Print the borrowed message.
-    fprintf(output, "Borrowed \"%s\" by %s %s\n", newNode->bookTitle, newNode->lastName, newNode->firstName);
-
-    // Insert newNode at the end of the list.
-    if (head == NULL) {
-        return newNode;
-    } else {
-        node_t *current = head;
-        while (current->next != NULL) {
-            current = current->next;
-        }
-        current->next = newNode;
+    //If the list is emty set head as the newNode
+    if(head == NULL){
+        return newNode; //New node becomes the head if the list is empty
+    } else{
+        node_t *value = head;
+        //value inserted 
+        while(value->next != NULL){
+           value = value->next;
     }
+    value = next->newNode;
+ }
     return head;
 }
 
-// Removes a node from the list (Return a Book)
+
 node_t *returnBook(node_t *head, char *title, char *lastName, char *firstName, FILE *output) {
-    node_t *current = head, *previous = NULL;
-    while (current != NULL) {
-        if (strcmp(current->bookTitle, title) == 0 &&
-            strcmp(current->lastName, lastName) == 0 &&
-            strcmp(current->firstName, firstName) == 0) {
-            // Found the matching node.
+    //Traverse the list with value
+    node_t *value = head;
+    node_t *previous = NULL;
+
+    //Traverse the list
+    while (value != NULL) {
+        //Check found the node to remove
+        if (strcmp(value->bookTitle, title) == 0 && strcmp(value->lastName, lastName) == 0 &&
+            strcmp(value->firstName, firstName) == 0) {
+            
+            // We found the node to remove
             if (previous == NULL) {
-                head = current->next;
+                // The node to remove is the head
+                head = value->next;
             } else {
-                previous->next = current->next;
+                // The node to remove is in the middle or end
+                previous->next = value->next;
             }
-            free(current);
+            
+            // Free the memory allocated for the removed node
+            free(value);
+
+            // Print the success message
             fprintf(output, "Returned \"%s\" by %s %s\n", title, lastName, firstName);
-            return head;
+            return head;  // Return the possibly updated head
         }
-        previous = current;
-        current = current->next;
+
+        // Move to the next node
+        previous = value;
+        value = value->next;
     }
-    // Not found.
-    fprintf(output, "\"%s\" is not currently borrowed by %s %s\n", title, lastName, firstName);
     return head;
 }
 
-// Checks if a book is currently borrowed.
 void checkBook(node_t *head, char *title, char *lastName, char *firstName, FILE *output) {
-    node_t *current = head;
+
+    node_t *value = head;
+
+    //Search the list
     while (current != NULL) {
+        //Compare all three: bookTitle, lastName, firstName
         if (strcmp(current->bookTitle, title) == 0 &&
             strcmp(current->lastName, lastName) == 0 &&
             strcmp(current->firstName, firstName) == 0) {
-            fprintf(output, "\"%s\" is borrowed by %s %s\n", current->bookTitle, current->lastName, current->firstName);
-            return;
+            
+            //Print when a match is found
+            fprintf(output, "\"%s\" is borrowed by %s, %s\n", value->bookTitle, value->lastName, value->firstName);
+            return;//exit
         }
-        current = current->next;
+        value = value->next; //move the node
     }
-    fprintf(output, "\"%s\" is not currently borrowed by %s %s\n", title, lastName, firstName);
+
+    // If we exit the loop, the book wasn't found in the list
+    fprintf(output, "\"%s\" is not currently borrowed by %s, %s\n", title, lastName, firstName);
 }
 
-// Displays the list of borrowed books.
-void displayBorrowedBooks(node_t *head, FILE *output) {
-    fprintf(output, "Borrowed Books List:\n");
+void displayBorrowedBooks(node_t *head, FILE *output){
+
+    
+
+    fprintf(output,"Borrowed Books List: \n");
+
+    //variable to for the loop
     int i = 1;
-    node_t *current = head;
-    while (current != NULL) {
-        fprintf(output, "%d. \"%s\" - %s, %s\n", i, current->bookTitle, current->lastName, current->firstName);
-        current = current->next;
+    //printing list
+    node_t *value = head;
+
+    while(value != NULL){
+        fprintf(output, "%d. \"%s\ - %s, %s", i + 1, value->bookTitle, value->lastName, value->firstName);
+
+        value = value->next;
         i++;
     }
 }
 
-// Frees all nodes in the linked list.
-void freeList(node_t *head) {
-    node_t *current = head;
-    while (current != NULL) {
-        node_t *temp = current;
-        current = current->next;
-        free(temp);
-    }
-}
