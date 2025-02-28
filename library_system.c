@@ -220,10 +220,10 @@ void displayBorrowedBooks(node_t *head, FILE *output){
 
 
 void freeList(node_t *head, FILE *output) {
-    node_t *current = head;
-    while (current != NULL) {
-        node_t *temp = current;
-        current = current->next;
+    node_t *value = head;
+    while (value != NULL) {
+        node_t *temp = value;
+        value = value->next;
         free(temp);
     }
 }
