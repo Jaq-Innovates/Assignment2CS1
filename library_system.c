@@ -211,7 +211,7 @@ void displayBorrowedBooks(node_t *head, FILE *output){
     node_t *value = head;
 
     while(value != NULL){
-        fprintf(output, "%d. \"%s\ - %s, %s", i + 1, value->bookTitle, value->lastName, value->firstName);
+        fprintf(output, "%d. \"%s\ - %s, %s\n", i, value->bookTitle, value->lastName, value->firstName);
 
         value = value->next;
         i++;
