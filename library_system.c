@@ -17,13 +17,6 @@
 #define MAX_TITLE 100
 #define MAX_NAME 50
 
-// Function prototypes
-node_t *borrowBook(node_t *head, char *title, char *lastName, char *firstName, FILE *output);
-node_t *returnBook(node_t *head, char *title, char *lastName, char *firstName, FILE *output);
-void checkBook(node_t *head, char *title, char *lastName, char *firstName, FILE *output);
-void displayBorrowedBooks(node_t *head, FILE *output);
-void freeList(node_t *head);
-
 // Define the linked list node
 typedef struct node_s {
     char bookTitle[MAX_TITLE];
@@ -31,6 +24,15 @@ typedef struct node_s {
     char lastName[MAX_NAME];
     struct node_s *next;
 } node_t;
+
+// Function prototypes
+node_t *borrowBook(node_t *head, char *title, char *lastName, char *firstName, FILE *output);
+node_t *returnBook(node_t *head, char *title, char *lastName, char *firstName, FILE *output);
+void checkBook(node_t *head, char *title, char *lastName, char *firstName, FILE *output);
+void displayBorrowedBooks(node_t *head, FILE *output);
+void freeList(node_t *head);
+
+
 
 int main(void) {
     node_t *head = NULL;
