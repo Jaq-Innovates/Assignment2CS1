@@ -70,18 +70,18 @@ int main(void){
 
         //Use a switch to handle the 5 operations
         switch (libOperation) {
-            case 1:// Borrow a Book
+            case 1://Borrow  Book
                 
                 fscanf(fp, " \"%[^\"]\" %s %s", title, lastName, firstName);
                 head = borrowBook(head, title, lastName, firstName, output);
                 break;
 
-            case 2:// Return a Book
+            case 2://Return Book
                 fscanf(fp, " \"%[^\"]\" %s %s", title, lastName, firstName);
                 head = returnBook(head, title, lastName, firstName, output);
                 break;
 
-            case 3:// Check to see if Book is Borrowed
+            case 3://Check to see if Book is Borrowed
                 fscanf(fp, " \"%[^\"]\" %s %s", title, lastName, firstName);
                 checkBook(head, title, lastName, firstName, output);
                 break;
@@ -92,13 +92,12 @@ int main(void){
                 break;
 
             default:
-                // If it's an unknown code (not 1–5), decide how to handle it
-                // For now, do nothing or skip the line
+                
                 break;
         }
     }
 
-    // 5) Free the linked list and close files
+    //close files
     freeList(head, output);
     fclose(fp);
     fclose(output);
@@ -195,7 +194,7 @@ void checkBook(node_t *head, char *title, char *lastName, char *firstName, FILE 
         value = value->next;//move the node
     }
 
-    // If we exit the loop, the book wasn't found in the list
+    //If we exit the loop, the book wasn't found in the list
     fprintf(output, "\"%s\" is not currently borrowed by %s, %s\n", title, lastName, firstName);
 }
 
@@ -211,7 +210,7 @@ void displayBorrowedBooks(node_t *head, FILE *output){
     node_t *value = head;
 
     while(value != NULL){
-        fprintf(output, "%d. \"%s\ - %s, %s\n", i, value->bookTitle, value->lastName, value->firstName);
+        fprintf(output, "%d. \"%s\" - %s, %s\n", i, value->bookTitle, value->lastName, value->firstName);
 
         value = value->next;
         i++;
